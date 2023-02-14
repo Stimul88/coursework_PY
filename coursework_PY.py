@@ -31,7 +31,7 @@ class VkUser:
             'access_token': VKtoken,
             'v': '5.131',
             'extended': '1',
-            'album_id': 'profile',
+            'album_id': 'wall',
             'photo_sizes': '1',
             'sort': '1',
             'offset': '0',
@@ -62,10 +62,19 @@ current_datetime = datetime.now().now().strftime('%Y-%m-%d_%H-%M-%S')
 
 vk = VkUser(VKtoken, '5.131')
 
-for i, j in vk.get_photo().items():
-    r = requests.get(j)
-    with open('VK_photo/' + str(i) + '.jpg', 'wb') as f:
-        f.write(r.content)
+path1 = 'VK_photo/'
+if path1 in os.getcwd():
+    for i, j in vk.get_photo().items():
+        r = requests.get(j)
+        with open(path1 + str(i) + '.jpg', 'wb') as f:
+            f.write(r.content)
+if not os.path.isdir('VK_photo'):
+    os.mkdir('VK_photo')
+    for i, j in vk.get_photo().items():
+        r = requests.get(j)
+        with open(path1 + str(i) + '.jpg', 'wb') as f:
+            f.write(r.content)
+
 
 
 
@@ -103,15 +112,15 @@ class YandexDisk:
 
 ya = YandexDisk(token=YAtoken)
 
-path = 'netology/backUP_photo_VK_'
+path = 'backUP_photo_VK_'
 
 ya._get_path(path)
 ya._get_upload_link(path)
 
 for i in os.walk('VK_photo/'):
     for j in tqdm(i[2]):
-        time.sleep(1)
-        ya.upload_file_to_disk('netology/backUP_photo_VK_/' + str(j), 'VK_photo/' + str(j))
+        time.sleep(0.5)
+        ya.upload_file_to_disk('backUP_photo_VK_/' + str(j), 'VK_photo/' + str(j))
 
 
 
